@@ -45,3 +45,12 @@ def update_deployment_status(deployment_id: int, update: DeploymentStatusUpdate)
             return deployment
 
     raise HTTPException(status_code=404, detail="Deployment not found")
+
+@app.delete("/deployments/{deployment_id}") #endpoint to delete deployment by id
+def delete_deployment(deployment_id: int):
+    for index, deployment in enumerate(deployments): #get positions and IDs of objects in the list
+        if deployment.id == deployment_id: #id check
+            deleted_deployment = deployments.pop(index) #delete deployment using .pop (relocate into deleted_deployment)
+            return deleted_deployment #show client which deployment deleted
+
+    raise HTTPException(status_code=404, detail="Deployment not found")
