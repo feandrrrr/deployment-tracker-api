@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 
 app = FastAPI()
@@ -32,4 +32,4 @@ def get_deployment(deployment_id: int):
         if deployment.id == deployment_id:
             return deployment
 
-    return {"error": "Deployment not found"} #in case not found
+    raise HTTPException(status_code=404, detail="Deployment not found") #in case not found
