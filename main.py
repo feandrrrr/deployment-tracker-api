@@ -1,19 +1,39 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
+from enum import Enum #for validation
 
 app = FastAPI()
+
+# Validation classes, will use them in models
+class Environment(str, Enum):
+    development = "development"
+    staging = "staging"
+    production = "production"
+
+
+class DeploymentStatus(str, Enum):
+    planned = "planned"
+    deploying = "deploying"
+    deployed = "deployed"
+    failed = "failed"
+
+
+class RiskLevel(str, Enum):
+    low = "low"
+    medium = "medium"
+    high = "high"
 
 class Deployment(BaseModel): #Pydantic basic model for deployments
     id: int
     service_name: str
-    environment: str
+    environment: Environment
     version: str
-    status: str
+    status: DeploymentStatus
     owner: str
-    risk_level: str
+    risk_level: RiskLevel
 
 class DeploymentStatusUpdate(BaseModel): #model for status update
-    status: str
+    status: DeploymentStatus
 
 deployments = []
 @app.get("/")
