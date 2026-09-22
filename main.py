@@ -20,3 +20,7 @@ def root():
 def create_deployment(deployment: Deployment): #data must fit the model
     deployments.append(deployment)
     return deployment
+
+@app.get("/deployments")
+def get_deployments():
+    return deployments
