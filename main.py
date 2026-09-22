@@ -12,6 +12,9 @@ class Deployment(BaseModel): #Pydantic basic model for deployments
     owner: str
     risk_level: str
 
+class DeploymentStatusUpdate(BaseModel): #model for status update
+    status: str
+
 deployments = []
 @app.get("/")
 def root():
@@ -33,3 +36,12 @@ def get_deployment(deployment_id: int):
             return deployment
 
     raise HTTPException(status_code=404, detail="Deployment not found") #in case not found
+
+@app.patch("/deployments/{deployment_id}") #endpoint for status updates
+def update_deployment_status(deployment_id: int, update: DeploymentStatusUpdate):
+    for deployment in deployments:
+        if deployment.id == deployment_id: #if deployment found - update its status
+            deployment.status = update.status
+            return deployment
+
+    raise HTTPException(status_code=404, detail="Deployment not found")
